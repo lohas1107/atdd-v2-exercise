@@ -28,30 +28,9 @@ public class HomePage {
         browser.shouldHaveText2(text);
     }
 
-    @SneakyThrows
-    public WebDriver createWebDriver() {
-        return browser.createWebDriver();
-    }
-
-    public WebDriver getWebDriver() {
-        return browser.getWebDriver();
-    }
-
     public void quitWebDriver() {
         // 確保環境獨立乾淨
         browser.quitWebDriver();
-    }
-
-    private void clickByText(String text) {
-        browser.clickByText(text);
-    }
-
-    private void inputByPlaceholder(String placeholder, String text) {
-        browser.inputByPlaceholder(placeholder, text);
-    }
-
-    private void shouldHaveText2(String text) {
-        browser.shouldHaveText2(text);
     }
 
 
