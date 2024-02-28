@@ -2,6 +2,7 @@ package com.odde.atddv2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.odde.atddv2.entity.User;
+import com.odde.atddv2.page.HomePage;
 import com.odde.atddv2.repo.UserRepo;
 import io.cucumber.java.After;
 import io.cucumber.java.zh_cn.假如;
@@ -16,7 +17,6 @@ import org.openqa.selenium.remote.RemoteWebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.net.URL;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,6 +24,7 @@ import static org.awaitility.Awaitility.await;
 import static org.openqa.selenium.By.xpath;
 
 public class TestSteps {
+    private final HomePage homePage = new HomePage();
     @Autowired
     UserRepo userRepo;
     private WebDriver webDriver = null;
@@ -42,11 +43,13 @@ public class TestSteps {
 
     @After
     public void quitWebDriver() {
+        // 確保環境獨立乾淨
         if (webDriver != null) {
             webDriver.quit();
             webDriver = null;
         }
-    }
+        homePage.quitWebDriver();
+}
 
     @那么("打印Token")
     public void 打印_token() {
@@ -87,18 +90,18 @@ public class TestSteps {
 
     @当("以用户名为{string}和密码为{string}登录时")
     public void 以用户名为和密码为登录时(String userName, String password) {
-        open();
-        login(userName, password);
+        homePage.open();
+        homePage.login(userName, password);
     }
 
     @那么("{string}登录成功")
     public void 登录成功(String userName) {
-        shouldHaveText("Welcome " + userName);
+        homePage.shouldHaveText("Welcome " + userName);
     }
 
     @那么("登录失败的错误信息是{string}")
     public void 登录失败的错误信息是(String message) {
-        shouldHaveText(message);
+        homePage.shouldHaveText(message);
     }
 
     public WebDriver getWebDriver() {
@@ -107,23 +110,4 @@ public class TestSteps {
         return webDriver;
     }
 
-    private void login(String userName, String password) {
-        await().ignoreExceptions().until(() -> getWebDriver()
-                        // // 代表 root，* 代表任意元素，[] 代表元素的属性，@ 代表 element 屬性
-                        // 用戶視角的元素定位相對變化小，因為這比較貼近需求，就不容易改動
-                        .findElement(xpath("//*[@placeholder='用户名']")), Objects::nonNull)
-                .sendKeys(userName);
-        await().ignoreExceptions().until(() -> getWebDriver()
-                        .findElement(xpath("//*[@placeholder='密码']")), Objects::nonNull)
-                .sendKeys(password);
-        await().ignoreExceptions().until(() -> getWebDriver().findElement(xpath("//*[text()='登录']")), Objects::nonNull).click();
-    }
-
-    private void open() {
-        getWebDriver().get("http://host.docker.internal:10081");
-    }
-
-    private void shouldHaveText(String text) {
-        await().ignoreExceptions().untilAsserted(() -> assertThat(getWebDriver().findElements(xpath("//*[text()='" + text + "']"))).isNotEmpty());
-    }
 }
