@@ -24,7 +24,8 @@ import static org.awaitility.Awaitility.await;
 import static org.openqa.selenium.By.xpath;
 
 public class TestSteps {
-    private final HomePage homePage = new HomePage();
+    @Autowired
+    HomePage homePage;
     @Autowired
     UserRepo userRepo;
     private WebDriver webDriver = null;
@@ -49,7 +50,7 @@ public class TestSteps {
             webDriver = null;
         }
         homePage.quitWebDriver();
-}
+    }
 
     @那么("打印Token")
     public void 打印_token() {

@@ -7,10 +7,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.springframework.stereotype.Component;
 
 import java.net.URL;
 import java.util.Objects;
 
+@Component
 public class Browser {
     WebDriver webDriver = null;
 

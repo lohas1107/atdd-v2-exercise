@@ -1,18 +1,14 @@
 package com.odde.atddv2.page;
 
-import lombok.SneakyThrows;
-import org.openqa.selenium.WebDriver;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.awaitility.Awaitility.await;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 // Page Object
 // 在 Home page 的登入操作集合都要重構到 Home page 類別中
+@Component
 public class HomePage {
-    private final Browser browser = new Browser();
-
-    public HomePage() {
-    }
+    @Autowired
+    Browser browser;
 
     public void open() {
         browser.open();
