@@ -10,10 +10,6 @@ public class HomePage {
     @Autowired
     Browser browser;
 
-    public void open() {
-        browser.open();
-    }
-
     public void login(String userName, String password) {
         browser.inputByPlaceholder("用户名", userName);
         browser.inputByPlaceholder("密码", password);
@@ -21,13 +17,7 @@ public class HomePage {
     }
 
     public void shouldHaveText(String text) {
-        browser.shouldHaveText2(text);
+        browser.shouldHaveText(text);
     }
-
-    public void quitWebDriver() {
-        // 確保環境獨立乾淨
-        browser.quitWebDriver();
-    }
-
 
 }

@@ -2,6 +2,7 @@ package com.odde.atddv2;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.odde.atddv2.entity.User;
+import com.odde.atddv2.page.Browser;
 import com.odde.atddv2.page.HomePage;
 import com.odde.atddv2.repo.UserRepo;
 import io.cucumber.java.After;
@@ -25,16 +26,14 @@ import static org.openqa.selenium.By.xpath;
 
 public class TestSteps {
     @Autowired
+    Browser browser;
+    @Autowired
     HomePage homePage;
+
     @Autowired
     UserRepo userRepo;
     private WebDriver webDriver = null;
     private Response response;
-
-    @SneakyThrows
-    public WebDriver createWebDriver() {
-        return new RemoteWebDriver(new URL("http://web-driver.tool.net:4444"), DesiredCapabilities.chrome());
-    }
 
     @当("测试环境")
     public void 测试环境() {
@@ -49,7 +48,7 @@ public class TestSteps {
             webDriver.quit();
             webDriver = null;
         }
-        homePage.quitWebDriver();
+        browser.quitWebDriver();
     }
 
     @那么("打印Token")
@@ -91,7 +90,7 @@ public class TestSteps {
 
     @当("以用户名为{string}和密码为{string}登录时")
     public void 以用户名为和密码为登录时(String userName, String password) {
-        homePage.open();
+        browser.open();
         homePage.login(userName, password);
     }
 
@@ -107,7 +106,7 @@ public class TestSteps {
 
     public WebDriver getWebDriver() {
         if (webDriver == null)
-            webDriver = createWebDriver();
+            webDriver = browser.createWebDriver();
         return webDriver;
     }
 

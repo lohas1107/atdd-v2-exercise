@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import java.net.URL;
 import java.util.Objects;
 
+// 封裝不同平台的瀏覽器操作
+// 封裝 web driver 第三方工具
 @Component
 public class Browser {
     WebDriver webDriver = null;
@@ -54,7 +56,7 @@ public class Browser {
                 .sendKeys(text);
     }
 
-    void shouldHaveText2(String text) {
+    void shouldHaveText(String text) {
         Awaitility.await().ignoreExceptions().untilAsserted(() -> Assertions.assertThat(getWebDriver().findElements(By.xpath("//*[text()='" + text + "']"))).isNotEmpty());
     }
 }
