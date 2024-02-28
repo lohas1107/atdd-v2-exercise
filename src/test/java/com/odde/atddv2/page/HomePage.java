@@ -25,19 +25,13 @@ public class HomePage {
     }
 
     public void login(String userName, String password) {
-        await().ignoreExceptions().until(() -> getWebDriver()
-                        // // 代表 root，* 代表任意元素，[] 代表元素的属性，@ 代表 element 屬性
-                        // 用戶視角的元素定位相對變化小，因為這比較貼近需求，就不容易改動
-                        .findElement(xpath("//*[@placeholder='用户名']")), Objects::nonNull)
-                .sendKeys(userName);
-        await().ignoreExceptions().until(() -> getWebDriver()
-                        .findElement(xpath("//*[@placeholder='密码']")), Objects::nonNull)
-                .sendKeys(password);
-        await().ignoreExceptions().until(() -> getWebDriver().findElement(xpath("//*[text()='登录']")), Objects::nonNull).click();
+        inputByPlaceholder("用户名", userName);
+        inputByPlaceholder("密码", password);
+        clickByText("登录");
     }
 
     public void shouldHaveText(String text) {
-        await().ignoreExceptions().untilAsserted(() -> assertThat(getWebDriver().findElements(xpath("//*[text()='" + text + "']"))).isNotEmpty());
+        shouldHaveText2(text);
     }
 
     @SneakyThrows
@@ -57,6 +51,22 @@ public class HomePage {
             webDriver.quit();
             webDriver = null;
         }
+    }
+
+    private void clickByText(String text) {
+        await().ignoreExceptions().until(() -> getWebDriver().findElement(xpath("//*[text()='" + text + "']")), Objects::nonNull).click();
+    }
+
+    private void inputByPlaceholder(String placeholder, String text) {
+        await().ignoreExceptions().until(() -> getWebDriver()
+                        // // 代表 root，* 代表任意元素，[] 代表元素的属性，@ 代表 element 屬性
+                        // 用戶視角的元素定位相對變化小，因為這比較貼近需求，就不容易改動
+                        .findElement(xpath("//*[@placeholder='" + placeholder + "']")), Objects::nonNull)
+                .sendKeys(text);
+    }
+
+    private void shouldHaveText2(String text) {
+        await().ignoreExceptions().untilAsserted(() -> assertThat(getWebDriver().findElements(xpath("//*[text()='" + text + "']"))).isNotEmpty());
     }
 
 
