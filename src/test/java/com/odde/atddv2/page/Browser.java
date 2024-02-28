@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 import java.net.URL;
 import java.util.Objects;
 
-// 封裝不同平台的瀏覽器操作
-// 封裝 web driver 第三方工具
+// 封裝不同平台的瀏覽器的使用者視角操作
+// 隔離依賴 web driver 第三方工具 ex. selenium, appium
 @Component
 public class Browser {
     WebDriver webDriver = null;
