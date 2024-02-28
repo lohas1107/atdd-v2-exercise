@@ -1,4 +1,5 @@
 # language: zh-CN
+# login 必須要發生，但不是要關心的重點，所以用 annotation 來標記
 @ui-login
 功能: 订单
 

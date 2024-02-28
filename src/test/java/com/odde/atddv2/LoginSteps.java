@@ -3,8 +3,8 @@ package com.odde.atddv2;
 import com.odde.atddv2.entity.User;
 import com.odde.atddv2.page.HomePage;
 import com.odde.atddv2.repo.UserRepo;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
-import io.cucumber.java.PendingException;
 import io.cucumber.java.zh_cn.假如;
 import io.cucumber.java.zh_cn.当;
 import io.cucumber.java.zh_cn.那么;
@@ -43,6 +43,28 @@ public class LoginSteps {
 
     @Before("@ui-login")
     public void uiLogin() {
-        throw new PendingException();
+        homePage.open();
+        homePage.login("joseph", "123");
+    }
+
+    @当("用如下数据录入订单:")
+    public void 用如下数据录入订单(DataTable table) {
+        browser.clickByText("订单");
+//        table.asLists().forEach(row -> {
+//            browser.inputTextByPlaceholder("订单号", row.get(0));
+//            browser.inputTextByPlaceholder("商品名称", row.get(1));
+//            browser.inputTextByPlaceholder("金额", row.get(2));
+//            browser.inputTextByPlaceholder("收件人", row.get(3));
+//            browser.inputTextByPlaceholder("电话", row.get(4));
+//            browser.inputTextByPlaceholder("地址", row.get(5));
+//            browser.clickDropDownByPlaceholder("状态");
+//            browser.clickDropDownItemByText(row.get(6));
+//        });
+//        browser.clickByText("录入");
+    }
+
+    @那么("显示如下订单")
+    public void 显示如下订单() {
+
     }
 }

@@ -20,9 +20,13 @@ public class Browser {
 
     private WebDriver webDriver = null;
 
-    @SneakyThrows
-    private WebDriver createWebDriver() {
-        return new RemoteWebDriver(new URL("http://web-driver.tool.net:4444"), DesiredCapabilities.chrome());
+    public void clickDropDownByPlaceholder(String placeholder) {
+//        waitElement(String.format("//*[contains(@placeholder, '%s')]/following-sibling::div", placeholder))
+        waitElement("//*[@placeholder='" + placeholder + "']").click();
+    }
+
+    public void clickDropDownItemByText(String text) {
+        waitElement("//text()='" + text + "'").click();
     }
 
     public void launchByUrl(String path) {
@@ -53,6 +57,11 @@ public class Browser {
             webDriver.quit();
             webDriver = null;
         }
+    }
+
+    @SneakyThrows
+    private WebDriver createWebDriver() {
+        return new RemoteWebDriver(new URL("http://web-driver.tool.net:4444"), DesiredCapabilities.chrome());
     }
 
     private WebElement waitElement(String xpathExpression) {
