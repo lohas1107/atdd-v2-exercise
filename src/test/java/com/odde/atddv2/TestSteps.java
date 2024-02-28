@@ -19,6 +19,7 @@ import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.awaitility.Awaitility.await;
 import static org.openqa.selenium.By.xpath;
 
 public class TestSteps {
@@ -87,5 +88,44 @@ public class TestSteps {
         if (webDriver == null)
             webDriver = createWebDriver();
         return webDriver;
+    }
+
+    @当("以用户名为{string}和密码为{string}登录时")
+    public void 以用户名为和密码为登录时(String username, String password) {
+        getWebDriver().get("http://host.docker.internal:10081/");
+        getWebDriver().findElement(By.xpath("//*[@id=\"app\"]/div/form/div[2]/div/div/input"))
+                .sendKeys(username);
+        getWebDriver().findElement(By.xpath("//*[@id=\"app\"]/div/form/div[3]/div/div/input"))
+                .sendKeys(password);
+        getWebDriver().findElement(By.xpath("//*[@id=\"app\"]/div/form/button"))
+                .click();
+
+        // 暫停畫面以利驗證測試程式
+        // TimeUnit.SECONDS.sleep(10);
+    }
+
+    @那么("{string}登录成功")
+    public void 登录成功(String username) {
+        // 用 await().ignoreExceptions().untilAsserted() 的 retry 機制
+        // 避免畫面還沒渲染完成就進行驗證
+        await().ignoreExceptions().untilAsserted(
+                () -> assertThat(getWebDriver()
+                        // 這裡的 xpath 是透過瀏覽器的開發者工具取得
+                        // 用 xpath 抓取元素的方式，畫面一改變就會失效，而且改很多地方
+                        .findElement(By.xpath("//*[@id=\"app\"]/div/div[2]/section/div"))
+                        .getText())
+                        .isEqualTo("Welcome " + username)
+                        // 嚴格驗證：能用 equal 就用 equal 驗證 --> 避免 false positive
+        );
+    }
+
+    @那么("登录失败的错误信息是{string}")
+    public void 登录失败的错误信息是(String errorMessage) {
+        await().ignoreExceptions().untilAsserted(
+                () -> assertThat(getWebDriver()
+                        .findElement(By.xpath("//*[@id=\"app\"]/div/form/div[4]"))
+                        .getText())
+                        .isEqualTo(errorMessage)
+        );
     }
 }
