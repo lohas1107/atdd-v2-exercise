@@ -87,7 +87,27 @@ public class TestSteps {
 
     @当("以用户名为{string}和密码为{string}登录时")
     public void 以用户名为和密码为登录时(String userName, String password) {
-        getWebDriver().get("http://host.docker.internal:10081");
+        open();
+        login(userName, password);
+    }
+
+    @那么("{string}登录成功")
+    public void 登录成功(String userName) {
+        shouldHaveText("Welcome " + userName);
+    }
+
+    @那么("登录失败的错误信息是{string}")
+    public void 登录失败的错误信息是(String message) {
+        shouldHaveText(message);
+    }
+
+    public WebDriver getWebDriver() {
+        if (webDriver == null)
+            webDriver = createWebDriver();
+        return webDriver;
+    }
+
+    private void login(String userName, String password) {
         await().ignoreExceptions().until(() -> getWebDriver()
                         // // 代表 root，* 代表任意元素，[] 代表元素的属性，@ 代表 element 屬性
                         // 用戶視角的元素定位相對變化小，因為這比較貼近需求，就不容易改動
@@ -99,19 +119,11 @@ public class TestSteps {
         await().ignoreExceptions().until(() -> getWebDriver().findElement(xpath("//*[text()='登录']")), Objects::nonNull).click();
     }
 
-    @那么("{string}登录成功")
-    public void 登录成功(String userName) {
-        await().ignoreExceptions().untilAsserted(() -> assertThat(getWebDriver().findElements(xpath("//*[text()='" + ("Welcome " + userName) + "']"))).isNotEmpty());
+    private void open() {
+        getWebDriver().get("http://host.docker.internal:10081");
     }
 
-    @那么("登录失败的错误信息是{string}")
-    public void 登录失败的错误信息是(String message) {
-        await().ignoreExceptions().untilAsserted(() -> assertThat(getWebDriver().findElements(xpath("//*[text()='" + message + "']"))).isNotEmpty());
-    }
-
-    public WebDriver getWebDriver() {
-        if (webDriver == null)
-            webDriver = createWebDriver();
-        return webDriver;
+    private void shouldHaveText(String text) {
+        await().ignoreExceptions().untilAsserted(() -> assertThat(getWebDriver().findElements(xpath("//*[text()='" + text + "']"))).isNotEmpty());
     }
 }
