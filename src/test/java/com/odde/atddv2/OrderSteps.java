@@ -13,6 +13,8 @@ import io.cucumber.java.zh_cn.那么;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+
 public class OrderSteps {
 
     @Autowired
@@ -50,5 +52,11 @@ public class OrderSteps {
     public void 用如下数据录入订单(DataTable table) {
         查询订单时();
         orderPage.addOrder(table.asMaps().get(0));
+    }
+
+    @那么("订单{string}已发货，快递单号为{string}")
+    public void 订单已发货快递单号为(String code, String deliverNo) {
+        Order order = orderRepo.findByCode(code);
+        assertThat(order.getDeliverNo()).isEqualTo(deliverNo);
     }
 }
